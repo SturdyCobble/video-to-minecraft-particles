@@ -14,13 +14,17 @@ root.destroy()
 if(filelocation == ""):
     raise Exception("No video file")
 print(filelocation)
-questions = [inquirer.Text('function-name', message="What is the function name?",validate=lambda _, x: re.match('[A-Za-z]', x), default="particles"), inquirer.Text('particles-density', message="Please Write the particles density",validate=lambda _, x: re.match('^[0-9]*$', x), default=5)]
+questions = [inquirer.Text('particles-density', message="Please Write the particles density",validate=lambda _, x: re.match('^[0-9]*$', x), default=5), 
+             inquirer.Text('x', message="Please Write x0",validate=lambda _, x: re.match('^[0-9]*$', x), default=0),
+             inquirer.Text('y', message="Please Write y0",validate=lambda _, x: re.match('^[0-9]*$', x), default=0),
+             inquirer.Text('z', message="Please Write z0",validate=lambda _, x: re.match('^[0-9]*$', x), default=0)]
 inqanswers = inquirer.prompt(questions)
 # convert frames
 frames = []
 os.system('cls' if os.name == 'nt' else 'clear')
 print("Getting Frames")
 video = cv2.VideoCapture(filelocation)
+fps = video.get(cv2.CAP_PROP_FPS)
 total_frames = int(video.get(cv2.CAP_PROP_FRAME_COUNT))
 for frame_number in range(total_frames):
     try:
@@ -28,7 +32,7 @@ for frame_number in range(total_frames):
         ret, frame = video.read()
         if not ret:
             raise Exception("Can't read frames")
-        frames.append(str(frame))
+        frames.append((frame))
     except Exception as e:
         raise Exception("An error occurred:", str(e))
 if(len(frames)>= 2000):
@@ -36,5 +40,5 @@ if(len(frames)>= 2000):
     warning = inquirer.prompt(inquirer.Confirm("warning-particles-over-2000", message=f"continue?"))
     if(warning["warning-particles-over-2000"] == False): raise ValueError("User didn't want to continue") 
 print("Finished Extracting frames, Now converting into a MC Function")
-main(frames, total_frames, inqanswers, filelocation)
+main(frames, total_frames, inqanswers, filelocation, fps)
 #main(inqanswers, inqanswers, inqanswers)
