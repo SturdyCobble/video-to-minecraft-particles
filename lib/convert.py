@@ -50,7 +50,7 @@ def convert(array_images, total_frames, function_name, particles_density, datapa
                 particles.append(new_command)
             #with open(output_path + f"/{index_ylyl}.mcfunction", "w") as file:
         if index_ylyl+1 < len(array_images):
-            particles.append(f"schedule function {function_name}:src/{index_ylyl+1} {ceil(20/fps)}t")
+            particles.append(f"schedule function {function_name}:src/{index_ylyl+1} {ceil(skip*20/fps)}t")
         else:
             particles.append("tag @a remove video_player")
         with open(f"{datapack_location}/data/{function_name}/functions/src/{index_ylyl}.mcfunction", "w") as file:
