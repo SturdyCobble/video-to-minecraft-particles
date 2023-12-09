@@ -15,7 +15,7 @@ def normalize_color(color):
                 new_color.append(color[i]/255)
             return new_color
 
-def convert(array_images, total_frames, function_name, particles_density, datapack_location, fps, pos0):
+def convert(array_images, total_frames, function_name, particles_density, datapack_location, fps, pos0, skip, resol):
     """
     array_images = array of frames
     total frames = like the name
@@ -24,11 +24,14 @@ def convert(array_images, total_frames, function_name, particles_density, datapa
     index_ylyl = 0
     #output_path = f"{os.getcwd()}/particles-datapack/data/{function_name}/functions/src"
     print("Starting to convert frames")
+    skip = int(skip) if 0 < int(skip) < total_frames else 1
+    resol = int(resol) if 0 < int(resol) < 1024 else 64
+    array_images = array_images[::skip]
     for current_image in array_images:
         index_ylyl = index_ylyl + 1
         command = "particleex normal minecraft:end_rod {0:.4f} {1:.4f} {2:.4f} {3:.3f} {4:.3f} {5:.3f} {6:.3f} 0.0 0.0 0.0 0 0 0 1 2"
         # This will produce 4096 particles in one frame, 64*64 = 4096 particles x*y
-        particle_resolution = (64,64)
+        particle_resolution = (resol,resol)
         particle_density = int(particles_density)
         image = Image.fromarray(current_image)
         image.thumbnail(particle_resolution)
