@@ -10,7 +10,9 @@ def main(frames, total_frames, question_answer, filelocation, fps):
     function_name = "particles" #question_answer['function-name']
     make_datapack(function_name, datapack_location)
     pos0 = (question_answer['x'], question_answer['y'], question_answer['z'])
-    convert(frames, total_frames, function_name, question_answer['particles-density'], datapack_location, fps, pos0)
+    skip = question_answer['skip']
+    resol = question_answer['resol']
+    convert(frames, total_frames, function_name, question_answer['particles-density'], datapack_location, fps, pos0, skip, resol)
     convert_audio(filelocation, function_name, resourcepack_location)
     os.system('cls' if os.name == 'nt' else 'clear')
     
