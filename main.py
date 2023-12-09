@@ -14,17 +14,20 @@ root.destroy()
 if(filelocation == ""):
     raise Exception("No video file")
 print(filelocation)
+video = cv2.VideoCapture(filelocation)
+fps = video.get(cv2.CAP_PROP_FPS)
+print("Current frame per second is %d. If fps is larger than 20, it will be adjusted to 20." % fps)
 questions = [inquirer.Text('particles-density', message="Please Write the particles density",validate=lambda _, x: re.match('^[0-9]*$', x), default=5), 
              inquirer.Text('x', message="Please Write x0",validate=lambda _, x: re.match('^[0-9]*$', x), default=0),
              inquirer.Text('y', message="Please Write y0",validate=lambda _, x: re.match('^[0-9]*$', x), default=0),
-             inquirer.Text('z', message="Please Write z0",validate=lambda _, x: re.match('^[0-9]*$', x), default=0)]
+             inquirer.Text('z', message="Please Write z0",validate=lambda _, x: re.match('^[0-9]*$', x), default=0),
+             inquirer.Text('skip', message="Please Write How much Frames you want to skip (If 1, default fps applied)",validate=lambda _, x: re.match('^[0-9]*$', x), default=1),
+             inquirer.Text('resol', message="Resolution (maximum NxN particles will be used for each frame, Default N = 64)",validate=lambda _, x: re.match('^[0-9]*$', x), default=64)]
 inqanswers = inquirer.prompt(questions)
 # convert frames
 frames = []
 os.system('cls' if os.name == 'nt' else 'clear')
 print("Getting Frames")
-video = cv2.VideoCapture(filelocation)
-fps = video.get(cv2.CAP_PROP_FPS)
 total_frames = int(video.get(cv2.CAP_PROP_FRAME_COUNT))
 for frame_number in range(total_frames):
     try:
@@ -35,10 +38,6 @@ for frame_number in range(total_frames):
         frames.append((frame))
     except Exception as e:
         raise Exception("An error occurred:", str(e))
-if(len(frames)>= 2000):
-    print(f"{colored('[WARNING]!', 'yellow', attrs=['bold'])} With the current configuration, you will need to make a paper server!\nsee https://github.com/gamersindo1223/video-to-minecraft-particles#minecraft-lagging-when-using-datapacks")
-    warning = inquirer.prompt(inquirer.Confirm("warning-particles-over-2000", message=f"continue?"))
-    if(warning["warning-particles-over-2000"] == False): raise ValueError("User didn't want to continue") 
 print("Finished Extracting frames, Now converting into a MC Function")
 main(frames, total_frames, inqanswers, filelocation, fps)
 #main(inqanswers, inqanswers, inqanswers)
