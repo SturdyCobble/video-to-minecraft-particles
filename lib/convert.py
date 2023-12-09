@@ -43,7 +43,7 @@ def convert(array_images, total_frames, function_name, particles_density, datapa
                 color = normalize_color(rgba_img.getpixel((i, j)))
                 relative_x = float((img_x/2)-i)/particle_density
                 relative_y = float((img_y/2)-j)/particle_density
-                new_command = command.format(float(pos0[0]) + relative_x, float(pos0[1]), float(pos0[2]) + relative_y,color[2],color[1],color[0],color[3])
+                new_command = command.format(float(pos0[0]) + relative_x, float(pos0[1]) + relative_y, float(pos0[2]),color[2],color[1],color[0],color[3])
                 particles.append(new_command)
             #with open(output_path + f"/{index_ylyl}.mcfunction", "w") as file:
         if index_ylyl+1 < len(array_images):
